@@ -41,8 +41,6 @@ int main(int argc, char** argv)
 {
   bool dont_tokenize = false;
 
-  istream *is(&std::cin);
-
   string ifilename, ofilename;
   for (int i = 1; i < argc; i++) {
     string v = argv[i];
@@ -50,8 +48,9 @@ int main(int argc, char** argv)
     if (v == "--help") { help(); exit(0); }
     else ifilename = v;
   }
-  ifstream ifile;
+  istream *is(&std::cin);
   if (ifilename != "" && ifilename != "-") {
+    ifstream ifile;
     ifile.open(ifilename.c_str());
     if (!ifile) { cerr << "error: cannot open " << ifilename << endl; exit(1); }
     is = &ifile;
