@@ -40,7 +40,6 @@ extern void load_ne_models();
 int main(int argc, char** argv)
 {
   bool dont_tokenize = false;
-
   string ifilename, ofilename;
   for (int i = 1; i < argc; i++) {
     string v = argv[i];
@@ -55,6 +54,8 @@ int main(int argc, char** argv)
     if (!ifile) { cerr << "error: cannot open " << ifilename << endl; exit(1); }
     is = &ifile;
   }
+
+  //----------------------------------------------------------------------------
 
   init_morphdic();
 
