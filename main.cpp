@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     string v = argv[i];
     if (v == "-nt") { dont_tokenize = true; continue; }
     if (v == "--help") { help(); exit(0); }
-    ifilename = argv[i];
+    else ifilename = v;
   }
   ifstream ifile;
   if (ifilename != "" && ifilename != "-") {
