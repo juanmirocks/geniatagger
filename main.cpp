@@ -40,7 +40,7 @@ extern void load_ne_models();
 int main(int argc, char** argv)
 {
   bool dont_tokenize = false;
-  
+
   istream *is(&std::cin);
 
   string ifilename, ofilename;
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     if (!ifile) { cerr << "error: cannot open " << ifilename << endl; exit(1); }
     is = &ifile;
   }
-                                                                      
+
   init_morphdic();
 
   vector<ME_Model> vme(16);
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
   cerr << "done." << endl;
 
   load_ne_models();
-  
+
   string line;
   int n = 1;
   while (getline(*is, line)) {
@@ -93,7 +93,5 @@ int main(int argc, char** argv)
     cout << postagged << endl;
     n++;
   }
-  
+
 }
-
-
