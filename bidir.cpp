@@ -31,7 +31,7 @@ void bidir_chuning_decode_beam(vector<Token> & vt, const vector<ME_Model> & vme)
 
 static ME_Sample
 mesample(const vector<Token> &vt, int i,
-         const string & pos_left2, const string & pos_left1, 
+         const string & pos_left2, const string & pos_left1,
          const string & pos_right1, const string & pos_right2)
 {
   ME_Sample sample;
@@ -156,7 +156,7 @@ mesample(const vector<Token> &vt, int i,
   //    cout << *j << " ";
   //  }
   //  cout << endl << endl;
-  
+
   return sample;
 }
 
@@ -166,7 +166,7 @@ mesample(const vector<Token> &vt, int i,
 ////////////////////////////////////////////////////////////////////
 static ME_Sample
 mesample(const vector<Token> &vt, int i,
-         const string & pos_left2, const string & pos_left1, 
+         const string & pos_left2, const string & pos_left1,
          const string & pos_right1, const string & pos_right2)
 {
   ME_Sample sample;
@@ -315,7 +315,7 @@ mesample(const vector<Token> &vt, int i,
   //    cout << *j << " ";
   //  }
   //  cout << endl << endl;
-    
+
   return sample;
 }
 *****************************/
@@ -377,7 +377,7 @@ bidir_train(const vector<Sentence> & vs, int para)
     char buf[1000];
     sprintf(buf, "model.bidir.%d", t);
     m.save_to_file(buf);
-    
+
   }
 
 }
@@ -429,7 +429,7 @@ struct Hypothesis
     if (j <= int(vt.size()) - 2) pos_right1 = vt[j+1].prd;
     if (j <= int(vt.size()) - 3) pos_right2 = vt[j+2].prd;
     ME_Sample mes = mesample(vt, j, pos_left2, pos_left1, pos_right1, pos_right2);
-    
+
     vector<double> membp;
     const ME_Model * mep = NULL;
     int bits = 0;
@@ -501,11 +501,11 @@ void generate_hypotheses(const int order, const Hypothesis & h,
   for (vector<pair<string, double> >::const_iterator k = h.vvp[pred_position].begin();
        k != h.vvp[pred_position].end(); k++) {
     Hypothesis newh = h;
-    
+
     newh.vt[pred_position].prd = k->first;
     newh.order[pred_position] = order + 1;
     newh.prob = h.prob * k->second;
-  
+
     // update the neighboring predictions
     for (int j = pred_position - UPDATE_WINDOW_SIZE; j <= pred_position + UPDATE_WINDOW_SIZE; j++) {
       if (j < 0 || j > n-1) continue;
@@ -528,7 +528,7 @@ bidir_decode_beam(vector<Token> & vt,
   list<Hypothesis> vh;
   Hypothesis h(vt, tag_dictionary, vme);
   vh.push_back(h);
-  
+
   for (size_t i = 0; i < n; i++) {
     list<Hypothesis> newvh;
     for (list<Hypothesis>::const_iterator j = vh.begin(); j != vh.end(); j++) {
@@ -547,7 +547,7 @@ bidir_decode_beam(vector<Token> & vt,
     vt[k].prd = h.vt[k].prd;
   }
   //  cout << endl;
-  
+
 
 }
 
@@ -562,7 +562,7 @@ decode_no_context(vector<Token> & vt, const ME_Model & me_none)
     me_none.classify(mes);
     vt[i].prd = mes.label;
   }
-  
+
   for (size_t k = 0; k < n; k++) {
     cout << vt[k].str << "/" << vt[k].prd << " ";
   }
@@ -582,8 +582,8 @@ public:
       "-LSB-", "[",
       "-RSB-", "]",
       "-LCB-", "{",
-      "-RCB-", "}", 
-      "***", "***", 
+      "-RCB-", "}",
+      "***", "***",
     };
 
     for (int i = 0;; i+=2) {
@@ -626,7 +626,7 @@ bidir_postag(const string & s, const vector<ME_Model> & vme, const vector<ME_Mod
     //    s = paren_converter.Ptb2Pos(s);
     vt.push_back(Token(s, "?"));
   }
-  
+
   const multimap<string, string> dummy;
   //  bidir_decode_search(vt, dummy, vme);
   bidir_decode_beam(vt, dummy, vme);
@@ -635,7 +635,7 @@ bidir_postag(const string & s, const vector<ME_Model> & vme, const vector<ME_Mod
   }
 
   bidir_chuning_decode_beam(vt, chunking_vme);
-  
+
   netagging(vt);
 
   string tmp;
@@ -703,7 +703,7 @@ bidir_postagging(vector<Sentence> & vs,
     cout << endl;
     */
     //    if (n > 100) break;
-    
+
     if (n++ % 10 == 0) cerr << ".";
   }
   cerr << endl;
@@ -743,4 +743,3 @@ bidir_postagging(vector<Sentence> & vs,
  * add bidir.cpp
  *
  */
-
