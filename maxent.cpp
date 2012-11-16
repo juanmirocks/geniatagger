@@ -27,7 +27,7 @@ ME_Model::BLMVMFunctionGradient(double *x, double *f, double *g, int n)
       _vl[i] = x[i];
     }
   }
-  
+
   double score = update_model_expectation();
 
   if (_inequality_width > 0) {
@@ -116,7 +116,7 @@ ME_Model::perform_LMVM()
 
   if (_inequality_width > 0) {
     int nvars = _fb.Size() * 2;
-    double *x = (double*)malloc(nvars*sizeof(double)); 
+    double *x = (double*)malloc(nvars*sizeof(double));
 
     // INITIAL POINT
     for (int i = 0; i < nvars / 2; i++) {
@@ -131,14 +131,14 @@ ME_Model::perform_LMVM()
       _vb[i] = x[i + _fb.Size()];
       _vl[i] = _va[i] - _vb[i];
     }
-  
+
     free(x);
 
     return 0;
   }
 
   int nvars = _fb.Size();
-  double *x = (double*)malloc(nvars*sizeof(double)); 
+  double *x = (double*)malloc(nvars*sizeof(double));
 
   // INITIAL POINT
   for (int i = 0; i < nvars; i++) { x[i] = _vl[i]; }
@@ -146,7 +146,7 @@ ME_Model::perform_LMVM()
   //  int info = BLMVMSolve(x, nvars);
 
   for (int i = 0; i < nvars; i++) { _vl[i] = x[i]; }
-  
+
   free(x);
 
   return 0;
@@ -202,7 +202,7 @@ ME_Model::make_feature_bag(const int cutoff)
   // count the occurrences of features
 #ifdef USE_HASH_MAP
   typedef __gnu_cxx::hash_map<unsigned int, int> map_type;
-#else    
+#else
   typedef std::map<unsigned int, int> map_type;
 #endif
   map_type count;
@@ -217,7 +217,7 @@ ME_Model::make_feature_bag(const int cutoff)
     }
   }
 
-  int n = 0; 
+  int n = 0;
   for (std::vector<Sample>::const_iterator i = _vs.begin(); i != _vs.end(); i++, n++) {
     max_num_features = max(max_num_features, (int)(i->positive_features.size()));
     for (std::vector<int>::const_iterator j = i->positive_features.begin(); j != i->positive_features.end(); j++) {
@@ -236,14 +236,14 @@ ME_Model::make_feature_bag(const int cutoff)
     }
   }
   count.clear();
-  
+
   //  cerr << "num_classes = " << _num_classes << endl;
   //  cerr << "max_num_features = " << max_num_features << endl;
 
   int c = 0;
-  
+
   init_feature2mef();
-  
+
   return max_num_features;
 }
 
@@ -259,7 +259,7 @@ ME_Model::heldout_likelihood()
     if (l == i->label) ncorrect++;
   }
   _heldout_error = 1 - (double)ncorrect / _heldout.size();
-  
+
   return logl /= _heldout.size();
 }
 
@@ -271,12 +271,12 @@ ME_Model::update_model_expectation()
 
   _vme.resize(_fb.Size());
   for (int i = 0; i < _fb.Size(); i++) _vme[i] = 0;
-  
+
   int n = 0;
   for (vector<Sample>::const_iterator i = _vs.begin(); i != _vs.end(); i++, n++) {
     vector<double> membp(_num_classes);
     int max_label = conditional_probability(*i, membp);
-    
+
     logl += log(membp[i->label]);
     //    cout << membp[*i] << " " << logl << " ";
     if (max_label == i->label) ncorrect++;
@@ -292,17 +292,17 @@ ME_Model::update_model_expectation()
 	_vme[*k] += membp[_fb.Feature(*k).label()] * j->second;
       }
     }
-    
+
   }
 
   for (int i = 0; i < _fb.Size(); i++) {
     _vme[i] /= _vs.size();
   }
-  
+
   _train_error = 1 - (double)ncorrect / _vs.size();
 
   logl /= _vs.size();
-  
+
   if (_inequality_width > 0) {
     for (int i = 0; i < _fb.Size(); i++) {
       logl -= (_va[i] + _vb[i]) * _inequality_width;
@@ -317,7 +317,7 @@ ME_Model::update_model_expectation()
   }
 
   //logl /= _vs.size();
-  
+
   //  fprintf(stderr, "iter =%3d  logl = %10.7f  train_acc = %7.5f\n", iter, logl, (double)ncorrect/train.size());
   //  fprintf(stderr, "logl = %10.7f  train_acc = %7.5f\n", logl, (double)ncorrect/_train.size());
 
@@ -362,7 +362,7 @@ ME_Model::add_training_sample(const ME_Sample & mes)
   //    cout << *j << " ";
   //  }
   //  cout << endl;
-  
+
   _vs.push_back(s);
 }
 
@@ -392,7 +392,7 @@ ME_Model::train(const int cutoff,
   if (_num_classes != _label_bag.Size()) {
     cerr << "warning: _num_class != _label_bag.Size()" << endl;
   }
-  
+
   if (_ref_modelp != NULL) {
     cerr << "setting reference distribution...";
     for (int i = 0; i < _ref_modelp->num_classes(); i++) {
@@ -404,7 +404,7 @@ ME_Model::train(const int cutoff,
     }
     cerr << "done" << endl;
   }
-  
+
   for (int i = 0; i < _nheldout; i++) {
     _heldout.push_back(_vs.back());
     _vs.pop_back();
@@ -420,13 +420,13 @@ ME_Model::train(const int cutoff,
   //    }
   //    cout << endl;
   //  }
-  
-  
-  
+
+
+
   //  _sigma = sqrt(Nsigma2 / (double)_train.size());
   _sigma = sigma;
   _inequality_width = widthfactor / _vs.size();
-  
+
   if (cutoff > 0)
     cerr << "cutoff threshold = " << cutoff << endl;
   if (_sigma > 0)
@@ -465,7 +465,7 @@ ME_Model::train(const int cutoff,
     _vee[i] /= _vs.size();
   }
   cerr << "done" << endl;
-  
+
   _vl.resize(_fb.Size());
   for (int i = 0; i < _fb.Size(); i++) _vl[i] = 0.0;
   if (_inequality_width > 0) {
@@ -487,7 +487,7 @@ ME_Model::train(const int cutoff,
     }
     cerr << "number of active features = " << sum << endl;
   }
-  
+
 }
 
 void
@@ -533,13 +533,13 @@ ME_Model::load_from_file(const string & filename)
     float lambda;
     string w = line.substr(t2+1);
     sscanf(w.c_str(), "%f", &lambda);
-      
+
     int label = _label_bag.Put(classname);
     int feature = _featurename_bag.Put(featurename);
     _fb.Put(ME_Feature(label, feature));
     _vl.push_back(lambda);
   }
-    
+
   _num_classes = _label_bag.Size();
 
   init_feature2mef();
@@ -577,7 +577,7 @@ ME_Model::load_from_array(const ME_Model_Data data[])
   _num_classes = _label_bag.Size();
 
   init_feature2mef();
-  
+
   return true;
 }
 
@@ -628,7 +628,7 @@ ME_Model::set_ref_dist(Sample & s) const
   }
   s.ref_pd = v;
 }
-  
+
 int
 ME_Model::classify(const Sample & nbs, vector<double> & membp) const
 {
@@ -767,4 +767,3 @@ ME_Model::classify(ME_Sample & mes) const
  * remove some comments
  *
  */
-
