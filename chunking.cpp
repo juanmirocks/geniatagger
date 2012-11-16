@@ -30,7 +30,7 @@ const DecodingStrategy decoding_strategy = EASIEST_FIRST;
 
 static ME_Sample
 mesample(const vector<Token> &vt, int pos,
-         const string & tag_left2,  const string & tag_left1, 
+         const string & tag_left2,  const string & tag_left1,
          const string & tag_right1, const string & tag_right2)
 {
   ME_Sample sample;
@@ -58,9 +58,9 @@ mesample(const vector<Token> &vt, int pos,
   if (pos < (int)vt.size()-1) p[3] = vt[pos+1].pos;
   p[4] = "EOS2";
   if (pos < (int)vt.size()-2) p[4] = vt[pos+2].pos;
-  
+
   char buf[1000];
-  // first-order 
+  // first-order
   for (int i = 0; i < 5; i++) {
     sprintf(buf, "W%d_%s", i-2, w[i].c_str());
     sample.features.push_back(buf);
@@ -82,10 +82,10 @@ mesample(const vector<Token> &vt, int pos,
     sprintf(buf, "P%dP%dP%d_%s_%s_%s", i-2, j-2, k-2, p[i].c_str(), p[j].c_str(), p[k].c_str());
     sample.features.push_back(buf);
   }
-  
+
   t[0] = tag_left2;
   t[1] = tag_left1;
-  t[2] = "";  
+  t[2] = "";
   t[3] = tag_right1;
   t[4] = tag_right2;
   // first-order
@@ -118,7 +118,7 @@ mesample(const vector<Token> &vt, int pos,
     sample.features.push_back(buf);
   }
 
-  
+
   /*
   for (int j = 0; j < vt.size(); j++)
     cout << vt[j].str << "/" << vt[j].pos << " ";
@@ -129,7 +129,7 @@ mesample(const vector<Token> &vt, int pos,
   }
   cout << endl << endl;
   */
-  
+
   return sample;
 }
 
@@ -191,7 +191,7 @@ struct Hypothesis
     if (j <= int(vt.size()) - 2) tag_right1 = vt[j+1].cprd;
     if (j <= int(vt.size()) - 3) tag_right2 = vt[j+2].cprd;
     ME_Sample mes = mesample(vt, j, tag_left2, tag_left1, tag_right1, tag_right2);
-    
+
     vector<double> membp;
     const ME_Model * mep = NULL;
     int bits = 0;
@@ -275,7 +275,7 @@ void generate_hypotheses(const int order, const Hypothesis & h,
   for (vector<pair<string, double> >::const_iterator k = h.vvp[pred_position].begin();
        k != h.vvp[pred_position].end(); k++) {
     Hypothesis newh = h;
-    
+
     newh.vt[pred_position].cprd = k->first;
     newh.order[pred_position] = order + 1;
     newh.prob = h.prob * k->second;
@@ -285,7 +285,7 @@ void generate_hypotheses(const int order, const Hypothesis & h,
     //      newh.Print();
     //      continue;
     //    }
-    
+
     // update the neighboring predictions
     for (int j = pred_position - TAG_WINDOW_SIZE; j <= pred_position + TAG_WINDOW_SIZE; j++) {
       if (j < 0 || j > n-1) continue;
@@ -322,7 +322,7 @@ bidir_chuning_decode_beam(vector<Token> & vt,
   list<Hypothesis> vh;
   Hypothesis h(vt, vme);
   vh.push_back(h);
-  
+
   for (size_t i = 0; i < n; i++) {
     list<Hypothesis> newvh;
     for (list<Hypothesis>::const_iterator j = vh.begin(); j != vh.end(); j++) {
@@ -352,10 +352,10 @@ bidir_chuning_decode_beam(vector<Token> & vt,
   for (size_t k = 0; k < n; k++) {
     vt[k].cprd = tags[k];
   }
-  
-  
+
+
   //  cout << endl;
-  
+
 
 }
 /*
@@ -390,4 +390,3 @@ bidir_chunking(vector<Sentence> & vs,
  * chunker
  *
  */
-
