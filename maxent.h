@@ -32,12 +32,12 @@ public:
 
   // to add a binary feature
   void add_feature(const std::string & f) {
-    features.push_back(f);   
+    features.push_back(f);
   }
 
   // to add a real-valued feature
   void add_feature(const std::string & s, const double d) {
-    rvfeatures.push_back(std::pair<std::string, double>(s, d)); 
+    rvfeatures.push_back(std::pair<std::string, double>(s, d));
   }
 
 public:
@@ -46,7 +46,7 @@ public:
   std::vector<std::pair<std::string, double> > rvfeatures;
 
   // obsolete
-  void add_feature(const std::pair<std::string, double> & f) {  
+  void add_feature(const std::pair<std::string, double> & f) {
     rvfeatures.push_back(f); // real-valued features
   }
 };
@@ -91,8 +91,8 @@ public:
   int train(const std::vector<ME_Sample> & train,
             const int cutoff = 0, const double sigma = 0, const double widthfactor = 0);
 
-private:  
-  
+private:
+
   struct Sample {
     int label;
     std::vector<int> positive_features;
@@ -113,7 +113,7 @@ private:
   struct ME_Feature
   {
     enum { MAX_LABEL_TYPES = 255 };
-      
+
     //    ME_Feature(const int l, const int f) : _body((l << 24) + f) {
     //      assert(l >= 0 && l < 256);
     //      assert(f >= 0 && f <= 0xffffff);
@@ -135,7 +135,7 @@ private:
   {
 #ifdef USE_HASH_MAP
     typedef __gnu_cxx::hash_map<unsigned int, int> map_type;
-#else    
+#else
     typedef std::map<unsigned int, int> map_type;
 #endif
     map_type mef2id;
@@ -193,7 +193,7 @@ private:
   {
 #ifdef USE_HASH_MAP
     typedef __gnu_cxx::hash_map<std::string, int, hashfun_str> map_type;
-#else    
+#else
     typedef std::map<std::string, int> map_type;
 #endif
     int _size;
