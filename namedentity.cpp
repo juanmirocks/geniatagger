@@ -86,7 +86,7 @@ static string wordshape(const string & s, bool fine)
     else if (islower(c)) c = 'a';
     else if (c == ' ' || c == '-') c = '-';
     else continue;
-    if (fine || c != pre_c) 
+    if (fine || c != pre_c)
       tmp += c;
     pre_c = c;
   }
@@ -134,17 +134,17 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
   char firstletter = vt[begin].str[0];
   char lastletter = vt[end-1].str[vt[end-1].str.size()-1];
   //  if (begin != 0 && isupper(firstletter))
-  //  if (isupper(firstletter) && isupper(lastletter)) 
+  //  if (isupper(firstletter) && isupper(lastletter))
   //    mes.features.push_back("IS_UPPER");
 
   //  if (end - begin == 1) {
   //    mes.features.push_back("EXACT_" + vt[begin].str);
   //  }
-  
+
   string tb = normalize(vt[begin].str);
   sprintf(buf, "TB_%s", tb.c_str());
   mes.features.push_back(buf);
-  
+
   for (int i = begin + 1; i < end-1; i++) {
   //for (int i = begin; i < end; i++) {
     s = normalize(vt[i].str);
@@ -156,7 +156,7 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
   sprintf(buf, "TE_%s", te.c_str());
   mes.features.push_back(buf);
 
-  
+
   // combination
   mes.features.push_back("C-1_TB_" + s_1 + "_" + tb);
   mes.features.push_back("C-1_TE_" + s_1 + "_" + te);
@@ -166,8 +166,8 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
 
   //  mes.features.push_back("C-2-1_TE_" + s_2 + "_" + s_1 + "_" + te);
   //  mes.features.push_back("TE_C+1+2_" + te + "_" + s1 + "_" + s2);
-  
-  
+
+
 
   s = "";
   string whole = "";
@@ -184,7 +184,7 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
   mes.features.push_back("WS2_" + wordshape(whole, false));
 
   //  mes.features.push_back("WHOLE_C+1_" + whole + "-" + s1);
-  
+
 
   // preffix and suffix
   for (int j = 1; j <= 10; j++) {
@@ -199,7 +199,7 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
     }
   }
 
-  
+
   //  if (contain_comma)
   //    mes.features.push_back("CONTAIN_COMMA");
 
@@ -226,8 +226,8 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
   //    posseq += vt[i].pos + "_";
   //  }
   //  mes.features.push_back("PosSeq_" + posseq);
-  
-  
+
+
   return mes;
 }
 
@@ -260,7 +260,7 @@ static bool is_candidate(const Sentence & s, const int begin, const int end)
     if (s[x].pos == "VBP") return false;
     if (s[x].pos == "MD")  return false;
     if (s[x].pos == "RB") penalty += 1;
-  
+
     if (penalty >= 5) return false;
   }
 
@@ -270,7 +270,7 @@ static bool is_candidate(const Sentence & s, const int begin, const int end)
   if (penalty >= 5) return false;
 
   if (kakko % 2 != 0) return false;
-  
+
   //    for (int x = begin; x < end; x++) {
   //      cout << s[x].str << "/" << s[x].pos << " ";
   //    }
@@ -298,7 +298,7 @@ void load_word_info(const string & filename)
 
 
 
-struct Annotation 
+struct Annotation
 {
   int label;
   int begin;
@@ -314,7 +314,7 @@ void find_NEs(const ME_Model & me,
               Sentence & s)
 {
   const int other_class = me.get_class_id("O");
-  
+
   vector<double> label_p(s.size());
   for (int j = 0; j < s.size(); j++) {
     s[j].ne = string("O");
@@ -400,7 +400,6 @@ int netagging(vector<Token> & vt)
 
   find_NEs(ne_model, vt);
 
-  
-  
-}
 
+
+}
