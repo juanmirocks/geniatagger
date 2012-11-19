@@ -190,7 +190,8 @@ static ME_Sample mesample(const string & label, const vector<Token> &vt, int beg
   //TODO geniatagger is flawed for Unicode characters. When comparing the size
   // of a string, the size actually returns the number of bytes of the
   // string. This may make the size of a string with a single unicode character
-  // have a length more than 1. As an example, the following size comparison is wrong
+  // have a length more than 1. As an example, the following size comparison is
+  // wrong. Another example, normalize's toLower doesn't work for Unicode
 
   // preffix and suffix
   for (int j = 1; j <= 10; j++) {
