@@ -71,7 +71,7 @@ static string normalize(const string & s)
   if (tmp == "an") tmp = "a";
   if (tmp == "the") tmp = "a";
   */
-  //TODO doesn't throw an exception but this does ""[-1] when s == "-"
+  //TODO it doesn't throw an exception but this does ""[-1] when s == "-"
   //TODO this also makes "s" the empty string. I guess this was not intended
   if (tmp[tmp.size()-1] == 's') return tmp.substr(0, tmp.size()-1);
   return tmp;
